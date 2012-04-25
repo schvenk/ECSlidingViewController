@@ -12,6 +12,7 @@ NSString *const ECSlidingViewUnderRightWillAppear = @"ECSlidingViewUnderRightWil
 NSString *const ECSlidingViewUnderLeftWillAppear  = @"ECSlidingViewUnderLeftWillAppear";
 NSString *const ECSlidingViewTopDidAnchorLeft     = @"ECSlidingViewTopDidAnchorLeft";
 NSString *const ECSlidingViewTopDidAnchorRight    = @"ECSlidingViewTopDidAnchorRight";
+NSString *const ECSlidingViewTopWillReset          = @"ECSlidingViewTopWillReset";
 NSString *const ECSlidingViewTopDidReset          = @"ECSlidingViewTopDidReset";
 
 @interface ECSlidingViewController()
@@ -360,7 +361,10 @@ NSString *const ECSlidingViewTopDidReset          = @"ECSlidingViewTopDidReset";
 - (void)resetTopViewWithAnimations:(void(^)())animations onComplete:(void(^)())complete
 {
   [self topViewHorizontalCenterWillChange:self.resettedCenter];
-  
+  dispatch_async(dispatch_get_main_queue(), ^{
+    [[NSNotificationCenter defaultCenter] postNotificationName:ECSlidingViewTopWillReset object:self userInfo:nil];
+  });
+    
   [UIView animateWithDuration:0.25f animations:^{
     if (animations) {
       animations();
