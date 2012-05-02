@@ -27,6 +27,10 @@ extern NSString *const ECSlidingViewTopWillReset;
 /** Notification that gets posted when the top view is centered on the screen */
 extern NSString *const ECSlidingViewTopDidReset;
 
+/** Notification that gets posted when the top view is centered on the screen */
+extern NSString *const ECSlidingViewTopDidStartMoving;
+
+
 /** @constant ECViewWidthLayout width of under views */
 typedef enum {
   /** Under view will take up the full width of the screen */
