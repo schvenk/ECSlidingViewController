@@ -326,41 +326,6 @@ NSString *const ECSlidingViewTopDidStartMoving = @"ECSlidingViewTopDidStartMovin
     }];
 }
 
-- (void)anchorTopViewOffScreenTo:(ECSide)side
-{
-    [self anchorTopViewOffScreenTo:side animations:nil onComplete:nil];
-}
-
-- (void)anchorTopViewOffScreenTo:(ECSide)side animations:(void(^)())animations onComplete:(void(^)())complete
-{
-    CGFloat newCenter = self.topView.center.x;
-    
-    if (side == ECLeft) {
-        newCenter = -self.resettedCenter;
-    } else if (side == ECRight) {
-        newCenter = self.screenWidth + self.resettedCenter;
-    }
-    
-    [self topViewHorizontalCenterWillChange:newCenter];
-    
-    [UIView animateWithDuration:0.25f animations:^{
-        if (animations) {
-            animations();
-        }
-        [self updateTopViewHorizontalCenter:newCenter];
-    } completion:^(BOOL finished){
-        if (complete) {
-            complete();
-        }
-        _topViewIsOffScreen = YES;
-        [self addTopViewSnapshot];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            NSString *key = (side == ECLeft) ? ECSlidingViewTopDidAnchorLeft : ECSlidingViewTopDidAnchorRight;
-            [[NSNotificationCenter defaultCenter] postNotificationName:key object:self userInfo:nil];
-        });
-    }];
-}
-
 - (void)topViewTapped
 {
     dispatch_async(dispatch_get_main_queue(), ^{
