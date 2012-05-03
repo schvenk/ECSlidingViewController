@@ -14,6 +14,7 @@ NSString *const ECSlidingViewTopDidAnchorLeft = @"ECSlidingViewTopDidAnchorLeft"
 NSString *const ECSlidingViewTopDidAnchorRight = @"ECSlidingViewTopDidAnchorRight";
 NSString *const ECSlidingViewTopDidReset = @"ECSlidingViewTopDidReset";
 NSString *const ECSlidingViewTopDidStartMoving = @"ECSlidingViewTopDidStartMoving";
+NSString *const ECSlidingViewTopDidSwitchPosition = @"ECSlidingViewTopDidSwitchPosition";
 
 @interface ECSlidingViewController()
 
@@ -50,6 +51,7 @@ NSString *const ECSlidingViewTopDidStartMoving = @"ECSlidingViewTopDidStartMovin
 - (void)updateUnderLeftLayout;
 - (void)updateUnderRightLayout;
 - (void)topViewTapped;
+- (BOOL)isSwitchingStateForTopViewCenter:(CGFloat)topViewCenter;
 
 @end
 
@@ -263,9 +265,11 @@ NSString *const ECSlidingViewTopDidStartMoving = @"ECSlidingViewTopDidStartMovin
             [[NSNotificationCenter defaultCenter] postNotificationName:ECSlidingViewTopDidStartMoving object:self userInfo:nil];            
         }
         
-        [self topViewHorizontalCenterWillChange:newCenterPosition];
-        [self updateTopViewHorizontalCenter:newCenterPosition];
-        [self topViewHorizontalCenterDidChange:newCenterPosition];
+        if (self.topViewIsMoving) {
+            [self topViewHorizontalCenterWillChange:newCenterPosition];
+            [self updateTopViewHorizontalCenter:newCenterPosition];
+            [self topViewHorizontalCenterDidChange:newCenterPosition];
+        }
     } else if (recognizer.state == UIGestureRecognizerStateEnded || recognizer.state == UIGestureRecognizerStateCancelled) {
         CGPoint currentVelocityPoint = [recognizer velocityInView:self.view];
         CGFloat currentVelocityX     = currentVelocityPoint.x;
@@ -323,6 +327,11 @@ NSString *const ECSlidingViewTopDidStartMoving = @"ECSlidingViewTopDidStartMovin
             NSString *key = (side == ECLeft) ? ECSlidingViewTopDidAnchorLeft : ECSlidingViewTopDidAnchorRight;
             [[NSNotificationCenter defaultCenter] postNotificationName:key object:self userInfo:nil];
         });
+        if ([self isSwitchingStateForTopViewCenter:newCenter]) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[NSNotificationCenter defaultCenter] postNotificationName:ECSlidingViewTopDidSwitchPosition object:self userInfo:nil];
+            });
+        }
     }];
 }
 
@@ -331,6 +340,9 @@ NSString *const ECSlidingViewTopDidStartMoving = @"ECSlidingViewTopDidStartMovin
     dispatch_async(dispatch_get_main_queue(), ^{
         [[NSNotificationCenter defaultCenter] postNotificationName:ECSlidingViewTopDidStartMoving object:self userInfo:nil];
     });
+    
+    // Setting initial horizontal center so isSwitchinState is triggered
+    self.initialHoizontalCenter = self.topView.center.x;
     [self resetTopView];
 }
 
@@ -353,7 +365,18 @@ NSString *const ECSlidingViewTopDidStartMoving = @"ECSlidingViewTopDidStartMovin
             complete();
         }
         [self topViewHorizontalCenterDidChange:self.resettedCenter];
+        if ([self isSwitchingStateForTopViewCenter:self.resettedCenter]) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[NSNotificationCenter defaultCenter] postNotificationName:ECSlidingViewTopDidSwitchPosition object:self userInfo:nil];
+            });
+        }
     }];
+}
+
+- (BOOL)isSwitchingStateForTopViewCenter:(CGFloat)topViewCenter
+{
+    // @todo if it's really this simple, maybe don't need separate function
+    return (self.initialHoizontalCenter != topViewCenter);
 }
 
 - (NSUInteger)autoResizeToFillScreen

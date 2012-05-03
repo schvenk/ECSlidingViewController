@@ -27,6 +27,9 @@ extern NSString *const ECSlidingViewTopDidReset;
 /** Notification that gets posted when the top view is centered on the screen */
 extern NSString *const ECSlidingViewTopDidStartMoving;
 
+/** Notification that gets posted when the top view changed position */
+extern NSString *const ECSlidingViewTopDidSwitchPosition;
+
 
 /** @constant ECViewWidthLayout width of under views */
 typedef enum {
