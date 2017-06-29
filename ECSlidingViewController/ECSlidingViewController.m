@@ -114,6 +114,7 @@
 #pragma mark - UIViewController
 
 - (void)awakeFromNib {
+    [super awakeFromNib];
     if (self.topViewControllerStoryboardId) {
         self.topViewController = [self.storyboard instantiateViewControllerWithIdentifier:self.topViewControllerStoryboardId];
     }
@@ -132,6 +133,7 @@
     if (!self.topViewController) [NSException raise:@"Missing topViewController"
                                              format:@"Set the topViewController before loading ECSlidingViewController"];
     self.topViewController.view.frame = [self topViewCalculatedFrameForPosition:self.currentTopViewPosition];
+    
     [self.view addSubview:self.topViewController.view];
 }
 
