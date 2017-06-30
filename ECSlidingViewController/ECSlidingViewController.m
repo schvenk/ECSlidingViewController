@@ -644,6 +644,10 @@
 }
 
 - (void)beginAppearanceTransitionForOperation:(ECSlidingViewControllerOperation)operation {
+    if ([(NSObject *)self.delegate respondsToSelector:@selector(slidingViewController:willPerformOperation:)]) {
+        [self.delegate slidingViewController:self willPerformOperation:operation];
+    }
+    
     UIViewController *viewControllerWillAppear    = [self viewControllerWillAppearForSuccessfulOperation:operation];
     UIViewController *viewControllerWillDisappear = [self viewControllerWillDisappearForSuccessfulOperation:operation];
     
@@ -663,6 +667,10 @@
     } else {
         [viewControllerWillDisappear endAppearanceTransition];
         [viewControllerWillAppear endAppearanceTransition];
+    }
+    
+    if ([(NSObject *)self.delegate respondsToSelector:@selector(slidingViewController:didPerformOperation:)]) {
+        [self.delegate slidingViewController:self didPerformOperation:operation];
     }
 }
 

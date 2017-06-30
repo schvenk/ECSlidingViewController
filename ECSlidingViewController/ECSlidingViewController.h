@@ -90,6 +90,11 @@
  */
 - (id<ECSlidingViewControllerLayout>)slidingViewController:(ECSlidingViewController *)slidingViewController
                         layoutControllerForTopViewPosition:(ECSlidingViewControllerTopViewPosition)topViewPosition;
+
+- (void)slidingViewController: (ECSlidingViewController *)slidingViewController willPerformOperation: (ECSlidingViewControllerOperation)operation;
+- (void)slidingViewController: (ECSlidingViewController *)slidingViewController didPerformOperation: (ECSlidingViewControllerOperation)operation;
+- (void)slidingViewControllerTopViewDidStartMovingWithViewController: (ECSlidingViewController *)slidingViewController;
+
 @end
 
 /**
