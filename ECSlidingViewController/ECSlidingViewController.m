@@ -134,7 +134,7 @@
                                              format:@"Set the topViewController before loading ECSlidingViewController"];
     self.topViewController.view.frame = [self topViewCalculatedFrameForPosition:self.currentTopViewPosition];
     
-    [self.view addSubview:self.topViewController.view];
+    [self.view insertSubview:self.topViewController.view atIndex:0];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
