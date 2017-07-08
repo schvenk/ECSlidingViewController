@@ -93,6 +93,7 @@
 
 - (void)slidingViewController: (ECSlidingViewController *)slidingViewController willPerformOperation: (ECSlidingViewControllerOperation)operation;
 - (void)slidingViewController: (ECSlidingViewController *)slidingViewController didPerformOperation: (ECSlidingViewControllerOperation)operation;
+- (void)slidingViewController: (ECSlidingViewController *)slidingViewController isAnimatingWithPercentageComplete: (CGFloat)percentageComplete;
 - (void)slidingViewControllerTopViewDidStartMovingWithViewController: (ECSlidingViewController *)slidingViewController;
 
 @end

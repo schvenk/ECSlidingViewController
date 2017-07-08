@@ -86,6 +86,12 @@
             CGFloat percentComplete = (translationX / self.fullWidth);
             if (percentComplete < 0) percentComplete = 0;
             [self updateInteractiveTransition:percentComplete];
+            
+            if ([(NSObject *)self.slidingViewController.delegate respondsToSelector:@selector(slidingViewController:isAnimatingWithPercentageComplete:)]) {
+                [self.slidingViewController.delegate slidingViewController:self.slidingViewController isAnimatingWithPercentageComplete:percentComplete];
+            }
+            
+            
             break;
         }
         case UIGestureRecognizerStateEnded:
