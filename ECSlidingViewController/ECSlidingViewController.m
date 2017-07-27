@@ -135,6 +135,9 @@
     self.topViewController.view.frame = [self topViewCalculatedFrameForPosition:self.currentTopViewPosition];
     
     [self.view insertSubview:self.topViewController.view atIndex:0];
+    
+    // TODO Hacky. Done with incomplete knowledge of how this works, to improve performance on first slide.
+    [self.view insertSubview:self.underRightViewController.view atIndex:0];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
