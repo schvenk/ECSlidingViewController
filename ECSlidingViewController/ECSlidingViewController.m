@@ -668,10 +668,6 @@
         [viewControllerWillDisappear endAppearanceTransition];
         [viewControllerWillAppear endAppearanceTransition];
     }
-    
-    if ([(NSObject *)self.delegate respondsToSelector:@selector(slidingViewController:didPerformOperation:)]) {
-        [self.delegate slidingViewController:self didPerformOperation:operation];
-    }
 }
 
 - (UIViewController *)viewControllerWillAppearForSuccessfulOperation:(ECSlidingViewControllerOperation)operation {
@@ -859,6 +855,10 @@
     
     [self updateTopViewGestures];
     [self endAppearanceTransitionForOperation:self.currentOperation isCancelled:[self transitionWasCancelled]];
+    
+    if (![self transitionWasCancelled] && [(NSObject *)self.delegate respondsToSelector:@selector(slidingViewController:didPerformOperation:)]) {
+        [self.delegate slidingViewController:self didPerformOperation:self.currentOperation];
+    }
     
     _transitionWasCancelled          = NO;
     _isInteractive                   = NO;
