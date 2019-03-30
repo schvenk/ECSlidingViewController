@@ -59,7 +59,7 @@
  
  @param slidingViewController The sliding view controller that is being transitioned.
  @param operation The type of transition that is occuring. See `ECSlidingViewControllerOperation` for a list of possible values.
- @param topViewController
+ @param topViewController _
  
  @return The animator object responsible for managing the transition animations, or nil if you want to use the standard sliding view controller transitions. The object you return must conform to the `UIViewControllerAnimatedTransitioning` protocol.
  */
@@ -217,7 +217,7 @@
  @param animated Specify `YES` to animate the transition or `NO` if you do not want the transition to be animated.
  @param complete A completion handler.
  */
-- (void)anchorTopViewToRightAnimated:(BOOL)animated onComplete:(void (^)())complete;
+- (void)anchorTopViewToRightAnimated:(BOOL)animated onComplete:(void (^)(void))complete;
 
 /**
  Anchors the `topViewController`'s view to the left side of the container to reveal the `underRightViewController`'s view.
@@ -232,7 +232,7 @@
  @param animated Specify `YES` to animate the transition or `NO` if you do not want the transition to be animated.
  @param complete A completion handler.
  */
-- (void)anchorTopViewToLeftAnimated:(BOOL)animated onComplete:(void (^)())complete;
+- (void)anchorTopViewToLeftAnimated:(BOOL)animated onComplete:(void (^)(void))complete;
 
 /**
  Resets the `topViewController`'s view's position to the middle. Completely covers any view that was underneath it.

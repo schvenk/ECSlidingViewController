@@ -42,13 +42,13 @@
 @property (nonatomic, assign) BOOL isAnimated;
 @property (nonatomic, assign) BOOL isInteractive;
 @property (nonatomic, assign) BOOL transitionInProgress;
-@property (nonatomic, copy) void (^animationComplete)();
+@property (nonatomic, copy) void (^animationComplete)(void);
 @property (nonatomic, copy) void (^coordinatorAnimations)(id<UIViewControllerTransitionCoordinatorContext>context);
 @property (nonatomic, copy) void (^coordinatorCompletion)(id<UIViewControllerTransitionCoordinatorContext>context);
 @property (nonatomic, copy) void (^coordinatorInteractionEnded)(id<UIViewControllerTransitionCoordinatorContext>context);
 - (void)setup;
 
-- (void)moveTopViewToPosition:(ECSlidingViewControllerTopViewPosition)position animated:(BOOL)animated onComplete:(void(^)())complete;
+- (void)moveTopViewToPosition:(ECSlidingViewControllerTopViewPosition)position animated:(BOOL)animated onComplete:(void(^)(void))complete;
 - (CGRect)topViewCalculatedFrameForPosition:(ECSlidingViewControllerTopViewPosition)position;
 - (CGRect)underLeftViewCalculatedFrameForTopViewPosition:(ECSlidingViewControllerTopViewPosition)position;
 - (CGRect)underRightViewCalculatedFrameForTopViewPosition:(ECSlidingViewControllerTopViewPosition)position;
@@ -436,21 +436,21 @@
     [self resetTopViewAnimated:animated onComplete:nil];
 }
 
-- (void)anchorTopViewToRightAnimated:(BOOL)animated onComplete:(void (^)())complete {
+- (void)anchorTopViewToRightAnimated:(BOOL)animated onComplete:(void (^)(void))complete {
     [self moveTopViewToPosition:ECSlidingViewControllerTopViewPositionAnchoredRight animated:animated onComplete:complete];
 }
 
-- (void)anchorTopViewToLeftAnimated:(BOOL)animated onComplete:(void (^)())complete {
+- (void)anchorTopViewToLeftAnimated:(BOOL)animated onComplete:(void (^)(void))complete {
     [self moveTopViewToPosition:ECSlidingViewControllerTopViewPositionAnchoredLeft animated:animated onComplete:complete];
 }
 
-- (void)resetTopViewAnimated:(BOOL)animated onComplete:(void(^)())complete {
+- (void)resetTopViewAnimated:(BOOL)animated onComplete:(void(^)(void))complete {
     [self moveTopViewToPosition:ECSlidingViewControllerTopViewPositionCentered animated:animated onComplete:complete];
 }
 
 #pragma mark - Private
 
-- (void)moveTopViewToPosition:(ECSlidingViewControllerTopViewPosition)position animated:(BOOL)animated onComplete:(void(^)())complete {
+- (void)moveTopViewToPosition:(ECSlidingViewControllerTopViewPosition)position animated:(BOOL)animated onComplete:(void(^)(void))complete {
     self.isAnimated = animated;
     self.animationComplete = complete;
     [self.view endEditing:YES];
@@ -584,7 +584,7 @@
         return;
     }
     if (self.transitionInProgress) return;
-
+    
     self.view.userInteractionEnabled = NO;
     
     self.transitionInProgress = YES;
@@ -715,7 +715,7 @@
                 [self.gestureView addGestureRecognizer:self.panGesture];
                 if (!self.gestureView.superview) [self.view insertSubview:self.gestureView aboveSubview:topView];
             }
-
+            
             if (self.topViewAnchoredGesture & ECSlidingViewControllerAnchoredGestureTapping &&
                 ![self.customAnchoredGesturesViewMap objectForKey:self.resetTapGesture]) {
                 [self.gestureView addGestureRecognizer:self.resetTapGesture];
@@ -954,5 +954,9 @@
 - (void)notifyWhenInteractionEndsUsingBlock:(void(^)(id<UIViewControllerTransitionCoordinatorContext>context))handler {
     self.coordinatorInteractionEnded = handler;
 }
+
+@synthesize isInterruptible;
+
+@synthesize targetTransform;
 
 @end
