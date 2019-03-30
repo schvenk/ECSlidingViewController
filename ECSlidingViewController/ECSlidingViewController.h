@@ -247,7 +247,7 @@
  @param animated Specify `YES` to animate the transition or `NO` if you do not want the transition to be animated.
  @param complete A completion handler.
  */
-- (void)resetTopViewAnimated:(BOOL)animated onComplete:(void(^)())complete;
+- (void)resetTopViewAnimated:(BOOL)animated onComplete:(void(^)(void))complete;
 
 
 ///--------------------------------------
